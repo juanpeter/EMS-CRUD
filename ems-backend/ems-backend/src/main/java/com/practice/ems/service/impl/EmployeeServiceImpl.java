@@ -9,7 +9,9 @@ import com.practice.ems.mapper.EmployeeMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -32,5 +34,31 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Employee does not exist with the given id:" + id));
 
         return EmployeeMapper.mapToEmployeeDto(employee);
+    }
+
+    public List<EmployeeDto> getAllEmployees() {
+
+        List<Employee> employeeList = employeeRepository.findAll();
+
+        return employeeList.stream().map(EmployeeMapper::mapToEmployeeDto)
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    public EmployeeDto updateEmployee(Long employeeId, EmployeeDto updatedEmployee) {
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee does not exist with given ID:" + employeeId)
+        );
+
+        employee.setFirstName(updatedEmployee.getFirstName());
+        employee.setLastName(updatedEmployee.getLastName());
+        employee.setEmail(updatedEmployee.getEmail());
+
+        employeeRepository.save(employee);
+
+        Employee updatedEmployeeObj = employeeRepository.save(employee);
+
+        return EmployeeMapper.mapToEmployeeDto(updatedEmployeeObj);
     }
 }

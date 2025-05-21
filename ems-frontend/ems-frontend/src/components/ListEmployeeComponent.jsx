@@ -24,7 +24,7 @@ export const ListEmployeeComponent = () => {
     <div className='container'>
         <h1 className='text-centered'>List of Employees</h1>
         
-        <button type="button" class="btn btn-primary mb-2 float-end" onClick={addNewEmployee}>Add new Employee</button>
+        <button type="button" className="btn btn-primary mb-2 float-end" onClick={addNewEmployee}>Add new Employee</button>
         <table className='table table-stripped table-bordered'>
             <thead>
                 <tr>
